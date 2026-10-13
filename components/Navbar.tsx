@@ -3,21 +3,18 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useAuth } from "@/lib/auth";
+import { btnPrimary, btnSecondary } from "@/components/ui/styles";
 
 const MAIN = [
   { href: "/", label: "Home" },
   { href: "/departments", label: "Departments" },
   { href: "/search", label: "Search tasks" },
 ];
-const MANAGE = [
-  { href: "/departments/manage", label: "Departments" },
-  { href: "/projects/manage", label: "Projects" },
-  { href: "/tasks/manage", label: "Tasks" },
-  { href: "/tags/manage", label: "Tags" },
-];
 
 export function Navbar() {
   const pathname = usePathname();
+  const { user, ready, logout } = useAuth();
   const [open, setOpen] = useState(false);
 
   useEffect(() => setOpen(false), [pathname]);
@@ -26,6 +23,22 @@ export function Navbar() {
     `rounded-md px-3 py-2 text-sm font-medium transition-colors ${
       pathname === href ? "bg-accent-soft text-accent-ink" : "text-muted hover:bg-paper hover:text-ink"
     }`;
+  const adminActive = pathname.startsWith("/admin");
+
+  const userArea = !ready ? null : user ? (
+    <>
+      <span className="px-2 text-sm text-muted">
+        Signed in as <span className="font-medium text-ink">{user.fullName}</span>{" "}
+        <span className="rounded-full bg-accent-soft px-2 py-0.5 text-xs font-medium text-accent-ink">{user.roleName}</span>
+      </span>
+      <button type="button" className={btnSecondary} onClick={logout}>Logout</button>
+    </>
+  ) : (
+    <>
+      <Link href="/login" className={btnSecondary}>Login</Link>
+      <Link href="/register" className={btnPrimary}>Register</Link>
+    </>
+  );
 
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-white/95 backdrop-blur">
@@ -36,17 +49,14 @@ export function Navbar() {
           {MAIN.map((item) => (
             <Link key={item.href} href={item.href} className={link(item.href)}>{item.label}</Link>
           ))}
-          <details key={pathname} className="relative">
-            <summary className="cursor-pointer list-none rounded-md px-3 py-2 text-sm font-medium text-muted hover:bg-paper hover:text-ink">
-              Manage ▾
-            </summary>
-            <div className="absolute right-0 mt-1 w-44 rounded-lg border border-line bg-white p-1 shadow-lg">
-              {MANAGE.map((item) => (
-                <Link key={item.href} href={item.href} className={`block ${link(item.href)}`}>{item.label}</Link>
-              ))}
-            </div>
-          </details>
+          {user && (
+            <Link href="/admin" className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${adminActive ? "bg-accent-soft text-accent-ink" : "text-muted hover:bg-paper hover:text-ink"}`}>
+              Admin
+            </Link>
+          )}
         </nav>
+
+        <div className="hidden items-center gap-2 md:flex">{userArea}</div>
 
         <button
           type="button"
@@ -67,10 +77,8 @@ export function Navbar() {
             {MAIN.map((item) => (
               <Link key={item.href} href={item.href} className={link(item.href)}>{item.label}</Link>
             ))}
-            <p className="mt-3 px-3 text-xs font-medium text-muted">Manage</p>
-            {MANAGE.map((item) => (
-              <Link key={item.href} href={item.href} className={link(item.href)}>{item.label}</Link>
-            ))}
+            {user && <Link href="/admin" className={link("/admin")}>Admin</Link>}
+            <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-line pt-3">{userArea}</div>
           </div>
         </nav>
       )}

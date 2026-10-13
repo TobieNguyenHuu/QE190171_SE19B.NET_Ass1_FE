@@ -37,3 +37,12 @@ Other scripts: `npm run lint`, `npm run build`.
 4. Deploy, then add the Vercel URL to `CORS_ALLOWED_ORIGINS` on the Render service and redeploy it.
 
 > Render's free tier sleeps when idle, so the first request can take up to a minute. The UI shows a spinner, and an error panel with **Try again** if the API is still waking up.
+
+## Assignment 2 – Authentication
+
+New pages: `/login`, `/register`, `/admin` (dashboard), `/admin/departments`, `/admin/projects`, `/admin/tasks`, `/admin/tags`, `/admin/accounts` (Admin only). The old `/…/manage` pages were moved under `/admin`.
+
+- JWT is stored in `localStorage` (`tasktrack.token`) and sent as `Authorization: Bearer <token>` on every create/update/delete call and on `/api/accounts`.
+- `/admin/*` is guarded in `app/admin/layout.tsx`: no valid (unexpired) token → redirect to `/login`.
+- Token expiry: the `exp` claim is checked on load and a timer logs the user out when it expires; any `401` from a protected call clears the session and redirects to `/login?expired=1`.
+- Navbar shows the user's name + Logout when logged in, and Login / Register otherwise. Logout clears the token and returns to the home page.

@@ -53,8 +53,8 @@ function Dashboard({ departments, projects, tasks }: { departments: Department[]
       <section className="grid gap-6 lg:grid-cols-[1fr_1.1fr]">
         <div className="grid grid-cols-3 gap-3 self-start">
           <CountTile href="/departments" value={departments.length} label="Departments" />
-          <CountTile href="/projects/manage" value={projects.length} label="Projects" />
-          <CountTile href="/tasks/manage" value={tasks.length} label="Tasks" />
+          <CountTile href="/admin/projects" value={projects.length} label="Projects" />
+          <CountTile href="/admin/tasks" value={tasks.length} label="Tasks" />
         </div>
         <StatusStrip tasks={tasks} />
       </section>
@@ -62,10 +62,10 @@ function Dashboard({ departments, projects, tasks }: { departments: Department[]
       <section className="mt-12">
         <div className="mb-4 flex items-end justify-between gap-3">
           <h2 className="text-xl font-bold">Active projects</h2>
-          <Link href="/projects/manage" className="text-sm font-medium text-accent hover:underline">Manage projects</Link>
+          <Link href="/admin/projects" className="text-sm font-medium text-accent hover:underline">Manage projects</Link>
         </div>
         {projects.length === 0 ? (
-          <EmptyState title="No active projects yet">Create one from Manage → Projects.</EmptyState>
+          <EmptyState title="No active projects yet">Create one from Admin → Projects.</EmptyState>
         ) : (
           <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {projects.map((p) => (

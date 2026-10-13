@@ -66,3 +66,17 @@ export type TagInput = { tagName: string; color: string | null };
 
 export type TaskFilters = { title?: string; status?: string; priority?: string; projectId?: string; tagId?: string };
 export type ProjectFilters = { name?: string; status?: string; departmentId?: string };
+
+export type Account = {
+  accountId: number;
+  fullName: string;
+  email: string;
+  /** 0 = Staff, 1 = Admin */
+  role: number;
+  roleName: string;
+  createdDate: string;
+};
+export type LoginResponse = { token: string; expiresAt: string; account: Account };
+export type LoginInput = { email: string; password: string };
+export type RegisterInput = { fullName: string; email: string; password: string };
+export type AccountInput = { fullName: string; role: number };

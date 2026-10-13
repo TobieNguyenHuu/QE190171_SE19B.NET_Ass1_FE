@@ -15,10 +15,10 @@ export default function DepartmentsPage() {
       <PageHeader
         title="Departments"
         description="Pick a department to see its projects."
-        action={<Link href="/departments/manage" className={btnSecondary}>Manage departments</Link>}
+        action={<Link href="/admin/departments" className={btnSecondary}>Manage departments</Link>}
       />
       <Loadable loading={loading} error={error} onRetry={reload}>
-        {data && data.length === 0 && <EmptyState title="No departments yet">Add the first one from Manage → Departments.</EmptyState>}
+        {data && data.length === 0 && <EmptyState title="No departments yet">Add the first one from Admin → Departments.</EmptyState>}
         {data && data.length > 0 && (
           <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {data.map((d) => (
